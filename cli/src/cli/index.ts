@@ -41,6 +41,7 @@ interface CliFlags {
 
 interface CliResults {
   appName: string;
+  projectPath: string;
   packages: AvailablePackages[];
   flags: CliFlags;
   databaseProvider: DatabaseProvider;
@@ -48,6 +49,7 @@ interface CliResults {
 
 const defaultOptions: CliResults = {
   appName: DEFAULT_APP_NAME,
+  projectPath: "/",
   packages: ["nextAuth", "prisma", "tailwind", "trpc"],
   flags: {
     noGit: false,
@@ -234,6 +236,12 @@ export const runCli = async (): Promise<CliResults> => {
               validate: validateAppName,
             }),
         }),
+        path: () =>
+          p.text({
+            message: "Where would you like to create this project?",
+            defaultValue: defaultOptions.projectPath,
+            placeholder: defaultOptions.projectPath,
+          }),
         language: () => {
           return p.select({
             message: "Will you be using TypeScript or JavaScript?",
@@ -344,6 +352,7 @@ export const runCli = async (): Promise<CliResults> => {
 
     return {
       appName: project.name ?? cliResults.appName,
+      projectPath: project.path,
       packages,
       databaseProvider:
         (project.databaseProvider as DatabaseProvider) || "sqlite",

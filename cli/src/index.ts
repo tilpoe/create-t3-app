@@ -37,6 +37,7 @@ const main = async () => {
 
   const {
     appName,
+    projectPath,
     packages,
     flags: { noGit, noInstall, importAlias, appRouter },
     databaseProvider,
@@ -49,6 +50,7 @@ const main = async () => {
 
   const projectDir = await createProject({
     projectName: appDir,
+    projectPath,
     scopedAppName,
     packages: usePackages,
     databaseProvider,

@@ -18,6 +18,7 @@ import { getUserPkgManager } from "~/utils/getUserPkgManager.js";
 
 interface CreateProjectOptions {
   projectName: string;
+  projectPath: string;
   packages: PkgInstallerMap;
   scopedAppName: string;
   noInstall: boolean;
@@ -28,6 +29,7 @@ interface CreateProjectOptions {
 
 export const createProject = async ({
   projectName,
+  projectPath,
   scopedAppName,
   packages,
   noInstall,
@@ -35,7 +37,8 @@ export const createProject = async ({
   databaseProvider,
 }: CreateProjectOptions) => {
   const pkgManager = getUserPkgManager();
-  const projectDir = path.resolve(process.cwd(), projectName);
+  const projectDir =
+    "/Users/tilpohnitzsch/Public/Programming" + projectPath + "/" + projectName;
 
   // Bootstraps the base Next.js application
   await scaffoldProject({
