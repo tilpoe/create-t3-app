@@ -21,9 +21,15 @@ export const dependencyVersionMap = {
   "@planetscale/database": "^1.19.0",
   postgres: "^3.4.4",
   "@libsql/client": "^0.9.0",
+  "@supabase/ssr": "^0.5.2",
+  "@supabase/supabase-js": "^2.47.2",
 
   // TailwindCSS
-  tailwindcss: "^3.4.3",
+  tailwindcss: "^4.0.0-beta.8",
+  "@tailwindcss/postcss": "^4.0.0-beta.8",
+  "tailwindcss-animate": "^1.0.7",
+  "tailwind-merge": "^2.5.5",
+  "tailwind-variants": "^0.3.0",
   postcss: "^8.4.39",
   prettier: "^3.3.2",
   "prettier-plugin-tailwindcss": "^0.6.5",

@@ -1,14 +1,8 @@
-// Example model schema from the Drizzle docs
-// https://orm.drizzle.team/docs/sql-schema-declaration
+import { relations } from "drizzle-orm";
+import { pgSchema, pgTableCreator, uuid } from "drizzle-orm/pg-core";
 
-import { sql } from "drizzle-orm";
-import {
-  index,
-  integer,
-  pgTableCreator,
-  timestamp,
-  varchar,
-} from "drizzle-orm/pg-core";
+import { primaryId, string } from "~/server/db/utils";
+import { SUPABASE_TABLE_NAMES } from "~/server/supabase/enums";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -18,19 +12,29 @@ import {
  */
 export const createTable = pgTableCreator((name) => `project1_${name}`);
 
-export const posts = createTable(
-  "post",
-  {
-    id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
-    name: varchar("name", { length: 256 }),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-      () => new Date()
-    ),
-  },
-  (example) => ({
-    nameIndex: index("name_idx").on(example.name),
-  })
-);
+/* -------------------------------------------------------------------------- */
+/*                                    AUTH                                    */
+/* -------------------------------------------------------------------------- */
+
+const authSchema = pgSchema("auth");
+
+export const tUser = authSchema.table("users", {
+  id: uuid("id").primaryKey(),
+});
+
+export const tUserRelations = relations(tUser, ({ one }) => ({
+  account: one(tUserAccount, {
+    fields: [tUser.id],
+    references: [tUserAccount.userId],
+  }),
+}));
+
+export const tUserAccount = createTable(SUPABASE_TABLE_NAMES.USER_ACCOUNT, {
+  id: primaryId(),
+  userId: uuid("userId")
+    .references(() => tUser.id)
+    .notNull(),
+  name: string("name").notNull(),
+});
+
+export type TUserAccount = typeof tUserAccount.$inferSelect;

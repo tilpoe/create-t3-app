@@ -16,6 +16,8 @@ export const drizzleInstaller: Installer = ({
   const devPackages: AvailableDependencies[] = [
     "drizzle-kit",
     "eslint-plugin-drizzle",
+    "@supabase/ssr",
+    "@supabase/supabase-js",
   ];
 
   addPackageDependency({

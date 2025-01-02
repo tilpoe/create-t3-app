@@ -12,6 +12,10 @@ export const tailwindInstaller: Installer = ({ projectDir }) => {
     dependencies: [
       "tailwindcss",
       "postcss",
+      "@tailwindcss/postcss",
+      "tailwindcss-animate",
+      "tailwind-merge",
+      "tailwind-variants",
       "prettier",
       "prettier-plugin-tailwindcss",
     ],
@@ -19,9 +23,6 @@ export const tailwindInstaller: Installer = ({ projectDir }) => {
   });
 
   const extrasDir = path.join(PKG_ROOT, "template/extras");
-
-  const twCfgSrc = path.join(extrasDir, "config/tailwind.config.ts");
-  const twCfgDest = path.join(projectDir, "tailwind.config.ts");
 
   const postcssCfgSrc = path.join(extrasDir, "config/postcss.config.js");
   const postcssCfgDest = path.join(projectDir, "postcss.config.js");
@@ -42,7 +43,6 @@ export const tailwindInstaller: Installer = ({ projectDir }) => {
     "format:check": 'prettier --check "**/*.{ts,tsx,js,jsx,mdx}" --cache',
   };
 
-  fs.copySync(twCfgSrc, twCfgDest);
   fs.copySync(postcssCfgSrc, postcssCfgDest);
   fs.copySync(cssSrc, cssDest);
   fs.copySync(prettierSrc, prettierDest);

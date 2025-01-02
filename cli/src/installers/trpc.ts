@@ -68,21 +68,10 @@ export const trpcInstaller: Installer = ({
               ? "with-drizzle.ts"
               : "base.ts";
 
-  const exampleRouterSrc = path.join(
-    extrasDir,
-    "src/server/api/routers/post",
-    exampleRouterFile
-  );
-  const exampleRouterDest = path.join(
-    projectDir,
-    "src/server/api/routers/post.ts"
-  );
-
   const copySrcDest: [string, string][] = [
     [apiHandlerSrc, apiHandlerDest],
     [trpcSrc, trpcDest],
     [rootRouterSrc, rootRouterDest],
-    [exampleRouterSrc, exampleRouterDest],
   ];
 
   if (appRouter) {
@@ -101,14 +90,6 @@ export const trpcInstaller: Installer = ({
       [
         path.join(trpcDir, "react.tsx"),
         path.join(projectDir, "src/trpc/react.tsx"),
-      ],
-      [
-        path.join(
-          extrasDir,
-          "src/app/_components",
-          packages?.tailwind.inUse ? "post-tw.tsx" : "post.tsx"
-        ),
-        path.join(projectDir, "src/app/_components/post.tsx"),
       ],
       [
         path.join(extrasDir, "src/trpc/query-client.ts"),

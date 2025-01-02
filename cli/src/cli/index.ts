@@ -243,61 +243,27 @@ export const runCli = async (): Promise<CliResults> => {
             placeholder: defaultOptions.projectPath,
           }),
         language: () => {
-          return p.select({
-            message: "Will you be using TypeScript or JavaScript?",
-            options: [
-              { value: "typescript", label: "TypeScript" },
-              { value: "javascript", label: "JavaScript" },
-            ],
-            initialValue: "typescript",
-          });
+          return new Promise<string>((resolve) => resolve("typescript"));
         },
-        _: ({ results }) =>
-          results.language === "javascript"
-            ? p.note(chalk.redBright("Wrong answer, using TypeScript instead"))
-            : undefined,
         styling: () => {
-          return p.confirm({
-            message: "Will you be using Tailwind CSS for styling?",
-          });
+          return new Promise<boolean>((resolve) => resolve(true));
         },
         trpc: () => {
-          return p.confirm({
-            message: "Would you like to use tRPC?",
-          });
+          return new Promise<boolean>((resolve) => resolve(true));
         },
         authentication: () => {
-          return p.select({
-            message: "What authentication provider would you like to use?",
-            options: [
-              { value: "none", label: "None" },
-              { value: "next-auth", label: "NextAuth.js" },
-              // Maybe later
-              // { value: "clerk", label: "Clerk" },
-            ],
-            initialValue: "none",
-          });
+          return new Promise<string>((resolve) => resolve("none"));
         },
         database: () => {
-          return p.select({
-            message: "What database ORM would you like to use?",
-            options: [
-              { value: "none", label: "None" },
-              { value: "prisma", label: "Prisma" },
-              { value: "drizzle", label: "Drizzle" },
-            ],
-            initialValue: "none",
-          });
+          return new Promise<string>((resolve) => resolve("drizzle"));
         },
         appRouter: () => {
-          return p.confirm({
-            message: "Would you like to use Next.js App Router?",
-            initialValue: true,
-          });
+          return new Promise<boolean>((resolve) => resolve(true));
         },
         databaseProvider: ({ results }) => {
           if (results.database === "none") return;
-          return p.select({
+          return new Promise<string>((resolve) => resolve("postgres"));
+          /*           return p.select({
             message: "What database provider would you like to use?",
             options: [
               { value: "sqlite", label: "SQLite (LibSQL)" },
@@ -306,7 +272,7 @@ export const runCli = async (): Promise<CliResults> => {
               { value: "planetscale", label: "PlanetScale" },
             ],
             initialValue: "sqlite",
-          });
+          }); */
         },
         ...(!cliResults.flags.noGit && {
           git: () => {
@@ -319,12 +285,7 @@ export const runCli = async (): Promise<CliResults> => {
         }),
         ...(!cliResults.flags.noInstall && {
           install: () => {
-            return p.confirm({
-              message:
-                `Should we run '${pkgManager}` +
-                (pkgManager === "yarn" ? `'?` : ` install' for you?`),
-              initialValue: !defaultOptions.flags.noInstall,
-            });
+            return new Promise<boolean>((resolve) => resolve(false));
           },
         }),
         importAlias: () => {
