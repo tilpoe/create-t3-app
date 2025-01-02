@@ -9,7 +9,7 @@ import { type LinkRoute } from "~/lib/routes/link";
  * const matches = matchesRoute(route, "/users/[id]/edit");
  * console.log(matches); // true
  */
-export function matchesRoute<RouteType>(path: string, template: Route) {
+export function matchesRoute(path: string, template: Route) {
   // Normalize paths to remove trailing slashes
   const normalize = (str: string) => str.replace(/\/+$/, "");
   const normalizedPath = normalize(path);
@@ -35,6 +35,6 @@ export function buildRoute<TRoute extends Route>({
   }
 
   return to.replace(/\$([a-zA-Z0-9_]+)/g, (_, key) => {
-    return (params as Record<string, string>)[key] as string;
+    return (params as Record<string, string>)[key as string] as string;
   });
 }

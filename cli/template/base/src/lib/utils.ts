@@ -12,7 +12,7 @@ export function getAriaLoadingShellProps(loading = true) {
     : {};
 }
 
-export async function safeCall<TArgs extends any[], TOutput>(
+export async function safeCall<TOutput>(
   fn: Promise<TOutput>,
   onError: (error: unknown) => void
 ): Promise<TOutput> {

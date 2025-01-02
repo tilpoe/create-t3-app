@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access */
+
 import { type NavigateOptions } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import {
   useParams as useNextParams,
@@ -21,16 +23,16 @@ import { $routerSearchParams } from "~/router.gen";
 /*                                      -                                     */
 /* -------------------------------------------------------------------------- */
 
-function _useParams<TRoute extends FullRoute>(_route: TRoute) {
+function useTypedNextParams<TRoute extends FullRoute>(_route: TRoute) {
   return useNextParams<FullRouter[TRoute]["params"]>();
 }
 
 export function useParams<TRoute extends Route>(_route: TRoute) {
-  return _useParams(_route);
+  return useTypedNextParams(_route);
 }
 
 export function useLayoutParams<TRoute extends LayoutRoute>(_route: TRoute) {
-  return _useParams(_route);
+  return useTypedNextParams(_route);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -63,16 +65,17 @@ export function useQueryState<
     return (validator as any).pick({ [key]: true }).parse({ [key]: value })[
       key
     ] as z.infer<TSearchParams>[K];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   const debouncedSetValue = useDebouncedCallback(
     (
       value: Parameters<typeof setValue>[0],
-      options?: Parameters<typeof setValue>[1]
+      options?: Parameters<typeof setValue>[1],
     ) => {
-      setValue(value, options);
+      void setValue(value, options);
     },
-    options?.debounceMs ?? 0
+    options?.debounceMs ?? 0,
   );
 
   return [parsedValue, debouncedSetValue] as const;
@@ -105,10 +108,10 @@ export function useRouter() {
   return {
     ...router,
     push: <TRoute extends Route>(
-      { to, params }: LinkRoute<TRoute>,
-      options?: NavigateOptions
+      route: LinkRoute<TRoute>,
+      options?: NavigateOptions,
     ) => {
-      router.push(buildRoute({ to, params } as any), options);
+      router.push(buildRoute(route), options);
     },
   };
 }

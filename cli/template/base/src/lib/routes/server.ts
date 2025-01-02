@@ -1,7 +1,7 @@
 import { redirect as nextRedirect, type RedirectType } from "next/navigation";
 import { type UnknownKeysParam, type z, type ZodTypeAny } from "zod";
 
-import { type LinkParams } from "~/lib/routes/link";
+import { type LinkRoute } from "~/lib/routes/link";
 import { buildRoute } from "~/lib/routes/shared";
 
 export function validateSearch<
@@ -16,10 +16,8 @@ export function validateSearch<
 }
 
 export function redirect<TRoute extends Route>(
-  route: {
-    to: TRoute;
-  } & LinkParams<TRoute>,
-  type?: RedirectType
+  route: LinkRoute<TRoute>,
+  type?: RedirectType,
 ): never {
-  nextRedirect(buildRoute({ to: route.to, params: route.params } as any), type);
+  nextRedirect(buildRoute(route), type);
 }

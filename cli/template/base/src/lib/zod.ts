@@ -1,11 +1,5 @@
 import { z } from "zod";
 
-export const serverFnValidator = <T extends z.ZodType>(validator: T) => {
-  return (d: z.infer<T>) => {
-    return validator.parse(d);
-  };
-};
-
 export const createValidationIssue = (
   ctx: z.RefinementCtx,
   issue: string,
