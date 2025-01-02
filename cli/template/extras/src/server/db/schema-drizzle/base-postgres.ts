@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgSchema, pgTableCreator, uuid } from "drizzle-orm/pg-core";
+import { pgPolicy, pgRole, pgSchema, pgTableCreator, uuid } from "drizzle-orm/pg-core";
 
 import { primaryId, string } from "~/server/db/utils";
 import { SUPABASE_TABLE_NAMES } from "~/server/supabase/enums";
@@ -11,6 +11,12 @@ import { SUPABASE_TABLE_NAMES } from "~/server/supabase/enums";
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
 export const createTable = pgTableCreator((name) => `project1_${name}`);
+
+/* ----------------------------------- RLS ---------------------------------- */
+
+const authenticatedRole = pgRole("authenticated");
+
+const basePolicy = pgPolicy("all", { as: "restrictive", to: authenticatedRole, for: "all" });
 
 /* -------------------------------------------------------------------------- */
 /*                                    AUTH                                    */

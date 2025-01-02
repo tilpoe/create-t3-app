@@ -1,6 +1,4 @@
-import { integer, pgTableCreator, varchar } from "drizzle-orm/pg-core";
-
-export const createTable = pgTableCreator((name) => `TB_${name}`);
+import { integer, varchar } from "drizzle-orm/pg-core";
 
 export function primaryId() {
   return integer("id").primaryKey().generatedByDefaultAsIdentity();
