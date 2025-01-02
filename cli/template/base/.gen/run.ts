@@ -5,6 +5,7 @@ import chokidar from "chokidar";
 import fs from "fs/promises";
 import path from "path";
 import { Project, VariableDeclarationKind, type SourceFile } from "ts-morph";
+import { parseArgs } from "util";
 
 const ROUTES_DIR = "./src/app";
 const ROUTE_GEN_FILE = "./src/router.gen.ts";
@@ -12,22 +13,37 @@ const ROUTE_GEN_FILE = "./src/router.gen.ts";
 let initialScan = true;
 let firstGen = true;
 
+const { values: scriptArgs } = parseArgs({
+  args: Bun.argv,
+  options: {
+    build: {
+      type: "boolean",
+    },
+  },
+  strict: true,
+  allowPositionals: true,
+});
+
 const watcher = chokidar.watch(ROUTES_DIR, {
   ignored: /(^|[\/\\])\../, // ignore dotfiles
   persistent: true,
 });
 
-function update() {
+async function update(_: "add" | "unlink" | "change") {
   if (!initialScan || firstGen) {
-    void generateRouteFile();
+    await generateRouteFile();
     firstGen = false;
+
+    if (scriptArgs.build) {
+      process.exit(0);
+    }
   }
 }
 
 watcher
-  .on("add", update)
-  .on("unlink", update)
-  .on("change", update)
+  .on("add", () => update("add"))
+  .on("unlink", () => update("unlink"))
+  .on("change", () => update("change"))
   .on("ready", () => {
     initialScan = false;
   });

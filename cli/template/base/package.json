@@ -4,16 +4,22 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "build": "bun generate --build && next build",
+    "check": "bun generate --build && next lint && tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
     "dev": "concurrently \"next dev --turbo\" \"bun generate\"",
     "dev:no-turbo": "concurrently \"next dev\" \"bun generate\"",
-    "build": "next build",
-    "start": "next start",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
+    "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
+    "generate": "bun run .gen/run.ts",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
-    "check": "next lint && tsc --noEmit",
     "preview": "next build && next start",
-    "typecheck": "tsc --noEmit",
-    "generate": "bun run .gen/run.ts"
+    "start": "next start",
+    "typecheck": "bun generate --build && tsc --noEmit"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.0",
@@ -33,6 +39,7 @@
   "devDependencies": {
     "@types/babel__generator": "^7.6.8",
     "@types/babel__traverse": "^7.20.6",
+    "@types/bun": "^1.1.14",
     "@types/eslint": "^8.56.10",
     "@types/node": "^20.14.10",
     "@types/react": "^18.3.3",
