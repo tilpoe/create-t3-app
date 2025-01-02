@@ -18,9 +18,9 @@ export const alertVariants = tv({
   base: "relative grid w-full grid-cols-[auto_1fr] items-start gap-3 rounded-xl border p-4 text-sm",
   variants: {
     type: {
-      default: "bg-background text-foreground",
-      error: "border-destructive bg-destructive/10 text-destructive",
-      info: "bg-info/10 text-info border-info",
+      default: "bg-bg text-fg",
+      error: "border-danger bg-danger/10 text-danger",
+      info: "bg-blue-500/10 text-blue-500 border-blue-500",
       warning: "bg-warning/10 text-warning border-warning",
       success: "bg-success/10 text-success border-success",
     },
@@ -84,7 +84,7 @@ export const AlertTitle = ({ className, ...props }: AlertTitleProps) => {
   return (
     <h5
       {...props}
-      className={cn("mb-1 font-medium leading-none tracking-tight", className)}
+      className={cn("mb-1 leading-none font-medium tracking-tight", className)}
     />
   );
 };
