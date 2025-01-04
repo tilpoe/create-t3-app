@@ -4,22 +4,21 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build": "bun generate --build && next build",
-    "check": "bun generate --build && next lint && tsc --noEmit",
+    "build": "next build",
+    "check": "next lint && tsc --noEmit",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "dev": "concurrently \"next dev --turbo\" \"bun generate\"",
-    "dev:no-turbo": "concurrently \"next dev\" \"bun generate\"",
+    "dev": "next dev --turbo",
+    "dev:no-turbo": "next dev",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
     "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
-    "generate": "bun run .gen/run.ts",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "preview": "next build && next start",
     "start": "next start",
-    "typecheck": "bun generate --build && tsc --noEmit"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.0",

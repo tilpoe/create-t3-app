@@ -2,7 +2,6 @@
 export const _initialConfig = {
   parser: "@typescript-eslint/parser",
   parserOptions: { project: true },
-  ignorePatterns: ["src/router.gen.ts"],
   plugins: ["@typescript-eslint"],
   extends: [
     "next/core-web-vitals",

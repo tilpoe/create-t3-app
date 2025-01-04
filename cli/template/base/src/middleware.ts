@@ -1,8 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
-import { env } from "~/env";
-import { buildRoute } from "~/lib/routes/shared";
+import { env } from "@/env";
 
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -19,17 +18,17 @@ export async function middleware(request: NextRequest) {
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value)
+            request.cookies.set(name, value),
           );
           supabaseResponse = NextResponse.next({
             request,
           });
           cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
+            supabaseResponse.cookies.set(name, value, options),
           );
         },
       },
-    }
+    },
   );
 
   // IMPORTANT: Avoid writing any logic between createServerClient and
@@ -37,13 +36,12 @@ export async function middleware(request: NextRequest) {
   // issues with users being randomly logged out.
   const {
     data: { user },
+    error,
   } = await supabase.auth.getUser();
 
   if (request.nextUrl.pathname.startsWith("/app")) {
-    if (!user) {
-      return NextResponse.redirect(
-        new URL(buildRoute({ to: "/login/" }), request.url)
-      );
+    if (!user || error) {
+      return NextResponse.redirect(new URL("/login", request.url));
     }
   }
 

@@ -1,15 +1,17 @@
 declare global {
   type SearchParams = Record<string, string | string[] | undefined>;
 
-  interface Layout<TRoute extends LayoutRoute> {
+  interface Layout<
+    TParams extends Record<string, unknown> = Record<string, unknown>,
+  > {
     children: Readonly<React.ReactNode>;
-    params: Promise<LayoutRouter[TRoute]["params"]>;
+    params: Promise<TParams>;
   }
 
-  interface Page<TRoute extends Route> {
-    params: Promise<Router[TRoute]["params"]>;
+  interface Page<
+    TParams extends Record<string, unknown> = Record<string, unknown>,
+  > {
+    params: Promise<TParams>;
     searchParams: Promise<SearchParams>;
   }
-
-  type PageParams<TRoute extends Route> = Router[TRoute]["params"];
 }

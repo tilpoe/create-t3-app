@@ -7,8 +7,9 @@ import {
 } from "react-aria-components";
 import { tv, type VariantProps } from "tailwind-variants";
 
+import Link, { type LinkProps } from "next/link";
+import { type ComponentPropsWithRef } from "react";
 import { Loader } from "~/components/ui/loader";
-import { Link, type LinkProps, type LinkRoute } from "~/lib/routes/link";
 import { focusButtonStyles } from "./primitive";
 
 const buttonStyles = tv({
@@ -114,7 +115,7 @@ const Button = ({
           size,
           shape,
           className,
-        })
+        }),
       )}
     >
       {(values) => (
@@ -133,26 +134,36 @@ const Button = ({
 /*                                 LinkButton                                 */
 /* -------------------------------------------------------------------------- */
 
-interface LinkButtonProps<TRoute extends Route>
-  extends VariantProps<typeof buttonStyles> {
-  route: LinkRoute<TRoute>;
-  children?: LinkProps<TRoute>["children"];
-  className?: string;
-}
+interface LinkButtonProps
+  extends Omit<
+      VariantProps<typeof buttonStyles>,
+      "isPending" | "isFocusVisible"
+    >,
+    LinkProps,
+    ComponentPropsWithRef<typeof Link> {}
 
-const LinkButton = <TRoute extends Route>({
-  route,
-  children,
-  ...styleProps
-}: LinkButtonProps<TRoute>) => {
+const LinkButton = ({
+  className,
+  intent,
+  appearance,
+  shape,
+  isDisabled,
+  ...props
+}: LinkButtonProps) => {
   return (
-    <Link route={route} className={buttonStyles(styleProps)}>
-      {(values) => (
-        <>{typeof children === "function" ? children(values) : children}</>
-      )}
-    </Link>
+    <Link
+      className={buttonStyles({
+        className,
+        intent,
+        appearance,
+        shape,
+        isDisabled,
+      })}
+      {...props}
+    />
   );
 };
 
 export { Button, ButtonPrimitive, LinkButton };
 export type { ButtonProps };
+

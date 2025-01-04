@@ -1,4 +1,15 @@
-import { type LinkRoute } from "~/lib/routes/link";
+import { type UnknownKeysParam, type z, type ZodTypeAny } from "zod";
+
+export function validateSearch<
+  TObject extends Record<string, any>,
+  T extends z.ZodRawShape,
+  UnknownKeys extends UnknownKeysParam = UnknownKeysParam,
+  Catchall extends ZodTypeAny = ZodTypeAny,
+>(validator: z.ZodObject<T, UnknownKeys, Catchall, TObject, TObject>) {
+  return async (searchParams: Promise<SearchParams>) => {
+    return validator.parse(await searchParams);
+  };
+}
 
 /**
  * Checks if a given string matches a next route. The special thing is that you can check against
@@ -9,7 +20,7 @@ import { type LinkRoute } from "~/lib/routes/link";
  * const matches = matchesRoute(route, "/users/[id]/edit");
  * console.log(matches); // true
  */
-export function matchesRoute(path: string, template: Route) {
+export function matchesRoute(path: string, template: string) {
   // Normalize paths to remove trailing slashes
   const normalize = (str: string) => str.replace(/\/+$/, "");
   const normalizedPath = normalize(path);
@@ -24,17 +35,4 @@ export function matchesRoute(path: string, template: Route) {
   const regex = new RegExp(`^${regexPattern}$`);
 
   return regex.test(normalizedPath);
-}
-
-export function buildRoute<TRoute extends Route>({
-  to,
-  params,
-}: LinkRoute<TRoute>) {
-  if ("params" === undefined) {
-    return to;
-  }
-
-  return to.replace(/\$([a-zA-Z0-9_]+)/g, (_, key) => {
-    return (params as Record<string, string>)[key as string] as string;
-  });
 }
